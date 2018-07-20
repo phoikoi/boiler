@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='boiler',
-    version='1.0',
+    version='1.1',
     py_modules=['boiler'],
     install_requires=[
         'Click',
@@ -12,4 +12,15 @@ setup(
         [console_scripts]
         boiler=boiler:render_it
     ''',
+    license='MIT License',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: POSIX',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3 :: Only',
+        'Topic :: Software Development :: Code Generators',
+        'Topic :: Text Processing :: Markup :: HTML',
+        'Topic :: Utilities',
+    ]
 )
