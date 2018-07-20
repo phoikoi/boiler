@@ -31,17 +31,21 @@ Options:
 ```
 
 If you don't specify the `DATA` argument (the input JSON file, in
-other words,) `boiler` will default to using `stdin`. Similarly, `OUTPUT` will default to `stdout`.
+other words,) `boiler` will default to using `stdin`. Similarly,
+`OUTPUT` will default to `stdout`.
 
 If you pass a template filename (which must be a Jinja2 template file, of
 course,) you have the option of using a builtin base template. If you're
 really lazy, you don't even have to put the `{% extends "base.html" %}`
 line at the top of your template file--just use the `-e` flag.
 (You can also use `--extend-base-template` but if you're too lazy to type
-out the directive, you're probably too TL;DR to type the option too.
+out the directive, you're probably too TL;DR to type the option too.)
 
 If you don't specify a `--template` file, the `--extend-base-template`
-option won't matter; you'll just get the (rendered, empty) base template, with the options you do or don't ask for.  If you don't specify any input, it will default to an empty JSON object, which is probably what you want, rather than a crash.
+option won't matter; you'll just get the (rendered, empty) base template,
+with the options you do or don't ask for.  If you don't specify any input,
+it will default to an empty JSON object, which is probably what you want,
+rather than a crash.
 
 ### Base template blocks
 
