@@ -4,7 +4,7 @@ import sys
 def die(message):
     sys.stderr.write(f"{message}\n")
     sys.exit(1)
-    
+
 try:
     import click
 except ImportError:
@@ -17,7 +17,7 @@ try:
     from pathlib import Path
 except ImportError:
     die("pathlib not available: probably need python 3.5 or higher")
-    
+
 import json
 from json import JSONDecodeError
 
@@ -41,7 +41,7 @@ BOILER_TEMPLATE = """<!DOCTYPE html>
 {% if boiler_use_bootstrap_css %}
 </div>
 {% endif %}
-{% if boiler_use_jquery or boiler_use_bootstrap_js %}
+{% if boiler_use_jquery %}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 {% endif %}
 {% if boiler_use_bootstrap_js %}
@@ -61,10 +61,13 @@ BOILER_TEMPLATE = """<!DOCTYPE html>
               ),
               default='none')
 @click.option('--use-jquery', '-j', is_flag=True, default=False)
+@click.option('--read-csv', '-c', is_flag=True, default=False)
+@click.option('--read-tsv', is_flag=True, default=False)
 @click.option('--template', '-t', type=click.File('r'))
 @click.argument('data', type=click.File('r'), default="-")
 @click.argument('output', type=click.File('w'), default="-")
 def render_it(extend_base_template, use_bootstrap, use_jquery,
+              read_csv, read_tsv,
                 template, data, output):
     templates = {'base.html': BOILER_TEMPLATE}
     base_template = '{% extends "base.html" %}' if extend_base_template else ''
@@ -77,16 +80,28 @@ def render_it(extend_base_template, use_bootstrap, use_jquery,
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    raw_json = data.read()
-    try:
-        json_data = json.loads(raw_json)
-    except JSONDecodeError:
-        json_data = {}
+    data_ext = Path(data.name).suffix
+    if read_csv or read_tsv or data_ext == '.csv' or data_ext == '.tsv':
+        import csv
+        sniff = data.read(1024)
+        data.seek(0)
+        if '\t' in sniff or data_ext == '.tsv' or read_tsv:
+            dia = csv.excel_tab
+        else:
+            dia = csv.excel
+        reader = csv.DictReader(data, dialect=dia)
+        input_data = {'csv':[item for item in reader]}
+    else:
+        raw_json = data.read()
+        try:
+            input_data = json.loads(raw_json)
+        except JSONDecodeError:
+            input_data = {}
     all_data = {}
     all_data['boiler_use_bootstrap_css'] = (use_bootstrap == "both") or (use_bootstrap == "css")
     all_data['boiler_use_bootstrap_js'] = (use_bootstrap == "both") or (use_bootstrap == "js")
-    all_data['boiler_use_jquery'] = (use_jquery == True)
-    all_data.update(json_data)
+    all_data['boiler_use_jquery'] = (use_jquery == True) or all_data['boiler_use_bootstrap_js'] == True
+    all_data.update(input_data)
     template_name = 'child.html' if 'child.html' in templates else 'base.html'
     t = env.get_template(template_name)
     output.write(t.render(**all_data))
