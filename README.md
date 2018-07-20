@@ -26,6 +26,8 @@ Options:
   -e, --extend-base-template
   -b, --use-bootstrap [none|css|js|both]
   -j, --use-jquery
+  -c, --read-csv
+  --read-tsv
   -t, --template FILENAME
   --help                          Show this message and exit.
 ```
@@ -33,6 +35,11 @@ Options:
 If you don't specify the `DATA` argument (the input JSON file, in
 other words,) `boiler` will default to using `stdin`. Similarly,
 `OUTPUT` will default to `stdout`.
+
+Specifying `--read-csv` or `--read-tsv` will cause `boiler` to
+assume that the input data is in those formats, respectively. It
+will also switch to those modes if the data file extension matches
+(i.e. `.csv` or `.tsv`).
 
 If you pass a template filename (which must be a Jinja2 template file, of
 course,) you have the option of using a builtin base template. If you're
