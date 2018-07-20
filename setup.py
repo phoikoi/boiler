@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='boiler',
-    version='1.1',
+    version='1.2',
     py_modules=['boiler'],
     install_requires=[
         'Click',
