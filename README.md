@@ -9,9 +9,16 @@ of Bootstrap (either its CSS or JS or both) and/or jQuery.  (If you ask
 for the Bootstrap JS, jQuery and the `popper` library, which are
 prerequisites, get added as well.)
 
+You can install this package with the following `pip` command:
+
+```shell
+pip install -e git://github.com:phoikoi/boiler.git@v1.0#egg=boiler
+```
+
+### Usage
 
 ```
-Usage: boiler [OPTIONS] [DATA] [OUTPUT]
+boiler [OPTIONS] [DATA] [OUTPUT]
 
 Options:
   -e, --extend-base-template
