@@ -11,7 +11,7 @@ prerequisites, get added as well.)
 
 
 ```
-Usage: boiler.py [OPTIONS] [DATA] [OUTPUT]
+Usage: boiler [OPTIONS] [DATA] [OUTPUT]
 
 Options:
   -e, --extend-base-template
