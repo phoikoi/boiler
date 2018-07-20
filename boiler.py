@@ -41,7 +41,7 @@ BOILER_TEMPLATE = """<!DOCTYPE html>
 {% if boiler_use_bootstrap_css %}
 </div>
 {% endif %}
-{% if boiler_use_jquery %}
+{% if boiler_use_jquery or boiler_use_bootstrap_js %}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 {% endif %}
 {% if boiler_use_bootstrap_js %}
@@ -70,17 +70,27 @@ def render_it(extend_base_template, use_bootstrap, use_jquery,
               read_csv, read_tsv,
                 template, data, output):
     templates = {'base.html': BOILER_TEMPLATE}
-    base_template = '{% extends "base.html" %}' if extend_base_template else ''
+    base_template = "{% extends "base.html" %}\n" if extend_base_template else ""
 
     if template:
         templates['child.html'] = f"{base_template}{template.read()}"
+
     loader = jinja2.DictLoader(templates)
+
     env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
         lstrip_blocks=True,
     )
+
+    env.globals = dict(
+        boiler_use_bootstrap_css = (use_bootstrap == "both") or (use_bootstrap == "css"),
+        boiler_use_bootstrap_js =(use_bootstrap == "both") or (use_bootstrap == "js"),
+        boiler_use_jquery = (use_jquery == True),
+    )
+
     data_ext = Path(data.name).suffix
+
     if read_csv or read_tsv or data_ext == '.csv' or data_ext == '.tsv':
         import csv
         sniff = data.read(1024)
@@ -97,15 +107,10 @@ def render_it(extend_base_template, use_bootstrap, use_jquery,
             input_data = json.loads(raw_json)
         except JSONDecodeError:
             input_data = {}
-    all_data = {}
-    all_data['boiler_use_bootstrap_css'] = (use_bootstrap == "both") or (use_bootstrap == "css")
-    all_data['boiler_use_bootstrap_js'] = (use_bootstrap == "both") or (use_bootstrap == "js")
-    all_data['boiler_use_jquery'] = (use_jquery == True) or all_data['boiler_use_bootstrap_js'] == True
-    all_data.update(input_data)
+
     template_name = 'child.html' if 'child.html' in templates else 'base.html'
     t = env.get_template(template_name)
-    output.write(t.render(**all_data))
+    output.write(t.render(**input_data))
 
 if __name__ == "__main__":
     render_it()
-
