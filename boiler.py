@@ -70,7 +70,7 @@ def render_it(extend_base_template, use_bootstrap, use_jquery,
               read_csv, read_tsv,
                 template, data, output):
     templates = {'base.html': BOILER_TEMPLATE}
-    base_template = "{% extends "base.html" %}\n" if extend_base_template else ""
+    base_template = '{% extends "base.html" %}\n' if extend_base_template else ''
 
     if template:
         templates['child.html'] = f"{base_template}{template.read()}"
