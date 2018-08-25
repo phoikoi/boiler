@@ -24,7 +24,7 @@ from json import JSONDecodeError
 BOILER_TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial_scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block doctitle %}{% endblock doctitle %}</title>
     {% if boiler_use_bootstrap_css %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
