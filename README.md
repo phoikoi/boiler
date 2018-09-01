@@ -12,7 +12,7 @@ prerequisites, get added as well.)
 You can install this package with the following `pip` command:
 
 ```shell
-pip install -e git://github.com:phoikoi/boiler.git@v1.2#egg=boiler
+pip install -e git://github.com/phoikoi/boiler.git@v1.2#egg=boiler
 ```
 
 *NOTE: Python 3.6+ is required.*
